@@ -95,10 +95,10 @@ namespace SecondTest
             o.Add(c);
             tt cc = new tt() { id = 1, name = null };
             o.Add(cc);
-            tt ccc = new tt() { id = 2, name = string.Empty };
-            o.Add(ccc);
-            tt cccc = new tt() { id = 3, name = "name" };
-            o.Add(cccc);
+            //tt ccc = new tt() { id = 2, name = string.Empty };
+            //o.Add(ccc);
+            //tt cccc = new tt() { id = 3, name = "name" };
+            //o.Add(cccc);
 
             // var t = o.Where(x => ((x.name != null) && (x.name.Length > 0))).ToArray();
             var t = o.Where(x => ((x.name?? string.Empty).Length > 0)).ToArray();
@@ -119,6 +119,13 @@ namespace SecondTest
             lst.Add("333");
             var t = lst.ToArray();
 
+            string[] k = null;
+
+            if (k == null)
+            {
+                int i = 1;
+            }
+
             var serializer = new JavaScriptSerializer();//Инициализация
             string jsonResult = serializer.Serialize(t);
 
@@ -131,6 +138,7 @@ namespace SecondTest
         {
             return new JavaScriptSerializer().Deserialize<T>(data);
         }
+
 
     }
 }
