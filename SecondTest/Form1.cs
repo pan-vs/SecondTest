@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Web.Script.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SecondTest
 {
@@ -139,6 +141,61 @@ namespace SecondTest
             return new JavaScriptSerializer().Deserialize<T>(data);
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Task<int> task1 = new Task<int>(() => Task_1());
+
+            // задача продолжения
+            Task task2 = task1.ContinueWith((t) => 
+            {
+                if (t.IsFaulted)
+                    MessageBox.Show(t.Exception.InnerException.Message.ToString());
+                else
+                    Task_2(t.Result);
+            });
+
+            Task task3 = task2.ContinueWith((t) =>
+            {
+                if (t.IsFaulted)
+                   MessageBox.Show("Error = " + t.Exception.InnerException.Message.ToString());
+                else
+                   Task_3();
+            });
+
+            task1.Start();
+            //MessageBox.Show("Всё!");
+        }
+
+        private int Task_1()
+        {
+            try
+            {
+                ss.Items.Clear();
+                ss.Items.Insert(0, new ToolStripLabel() { Text = "Task_1" });
+                Thread.Sleep(3000);
+                int i = 0;
+                int ii = 1 / i;
+                return 11;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void Task_2(int t)
+        {
+            ss.Items.Clear();
+            ss.Items.Insert(0, new ToolStripLabel() { Text = "Task_2_" + t.ToString() });
+            Thread.Sleep(3000);
+        }
+
+        private void Task_3()
+        {
+            ss.Items.Clear();
+            ss.Items.Insert(0, new ToolStripLabel() { Text = "Task_3_" });
+            Thread.Sleep(3000);
+        }
 
     }
 }
